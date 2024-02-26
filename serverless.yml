@@ -1,0 +1,27 @@
+service: firebaseNotifications
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: us-west-1
+
+functions:
+  firebasePN:
+  handler: index.handler
+  events: 
+    - httpApi:
+        path: /pushNotification
+        method: POST
+
+environment:
+  GOOGLE_APPLICATION_CREDENTIALS: /path/to/your/service_account.json
+
+layers:
+  my-firebase-layer:
+    path: /opt/firebase # Path within the Lambda execution environment
+    # Replace with the S3 bucket and object key where your layer is stored
+    content: s3://your-bucket/firebase-layer.zip
+
+plugins:
+  - serverless-layer-plugin
